@@ -16,8 +16,24 @@ services:
             - ./:/var/www
         networks:
             - microservice-02
+    # queue
+    queue:
+        build:
+            args:
+                user: laravel
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        command: 'php artisan queue:work'
+        restart: unless-stopped
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - redis
+        networks:
+            - microservice-02
 
-    #nginx
+    # nginx
     nginx:
         image: nginx:alpine
         restart: unless-stopped
@@ -43,6 +59,15 @@ services:
             - 3307:3306
         volumes:
             - ./.docker/mysql/dbdata:/var/lib/mysql
+        networks:
+            - microservice-02
+
+    # redis
+    redis:
+        image: redis:latest
+        restart: unless-stopped
+        ports:
+            - 6379:6379
         networks:
             - microservice-02
 
