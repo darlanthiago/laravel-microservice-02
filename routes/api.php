@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\{
+    EvaluationController
+};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +18,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::get('/', function () {
+    return response()->json([
+        'message' => 'success',
+        'application' => env("APP_NAME"),
+    ]);
 });
+
+Route::get('/evaluations/{company}', [EvaluationController::class, 'index']);
+Route::post('/evaluations/{company}', [EvaluationController::class, 'store']);
