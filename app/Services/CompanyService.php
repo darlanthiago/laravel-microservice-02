@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Services\Traits\ConsumeExternalService;
+use DarlanThiago\MicroservicesCommon\Services\Traits\ConsumeExternalService;
 
 class CompanyService
 {
