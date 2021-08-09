@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateEvaluation;
 use App\Http\Resources\EvaluationResource;
+use App\Jobs\EvaluationCreated;
 use App\Models\Evaluation;
 use App\Services\CompanyService;
 use Illuminate\Http\Request;
@@ -47,6 +48,10 @@ class EvaluationController extends Controller
         }
 
         $evaluation = $this->repository->create($request->validated());
+
+        $company = $response->json();
+
+        EvaluationCreated::dispatch($company['data']['email'])->onQueue('queue_email');
 
         return new EvaluationResource($evaluation);
     }
